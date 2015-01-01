@@ -7,13 +7,6 @@ def say(msg)
 end
 
 begin
-  say "Press 'Enter' to use, or Type 'NO' to exit"
-  answer = gets.chomp
-  answer.downcase
-  if answer == 'no'
-    break
-  end
-
   say "What is your first number?"
   num1 = gets.chomp
   say "Your number is #{num1}"
@@ -36,4 +29,8 @@ begin
   end
 
   say result
+
+  say "Press 'Enter' to use again, or Type 'NO' to exit"
+  answer = gets.chomp
+  answer.downcase
 end while answer != 'no'
