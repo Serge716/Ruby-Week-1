@@ -24,11 +24,15 @@ begin
     result = num1.to_i - num2.to_i
   elsif operator == '3'
     result = num1.to_i * num2.to_i
-  else
+  elsif operator == '4'
     result = num1.to_f / num2.to_f
+  else
+    if operator.to_i < 0 || operator.to_i > 4
+    end
+    say "#{operator} is an Invalid number.  Start Over."
   end
 
-  say result
+  say result if operator == true
 
   say "Press 'Enter' to use again, or Type 'NO' to exit"
   answer = gets.chomp
