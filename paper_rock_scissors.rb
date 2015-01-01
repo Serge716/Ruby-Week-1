@@ -14,8 +14,7 @@ begin
   say "Play Paper Rock Scissors!"
   say "Choose one: (P/R/S)"
 
-  choice = gets.chomp
-  choice.downcase!
+  choice = gets.chomp.downcase
 
   if choice == 'p'
     my_choice = 'Paper'
@@ -76,4 +75,3 @@ begin
   answer = gets.chomp
   answer.downcase
 end while answer != 'n'
-
