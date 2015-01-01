@@ -27,9 +27,9 @@ begin
   elsif operator == '4'
     result = num1.to_f / num2.to_f
   else
-    if operator.to_i < 0 || operator.to_i > 4
+    if operator.to_i < 1 || operator.to_i > 4
+      say "#{operator} is an Invalid number.  Start Over."
     end
-    say "#{operator} is an Invalid number.  Start Over."
   end
 
   say result if operator == true
