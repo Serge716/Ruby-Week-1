@@ -47,7 +47,7 @@ begin
 
   computer_choice = artificial_intelligence
 
-   player_choice = validated_player_input(player_choice)
+  player_choice = validated_player_input(player_choice)
 
   def display_user_and_computer_selection(user, computer)
     puts "You picked #{user} and computer picked #{computer}"
@@ -70,6 +70,8 @@ begin
   puts "Play again? (Y/N)"
   answer = gets.chomp.downcase
 end while answer != 'n'
+
+system "clear"
 
 
 ############################# OLD VERSION ##########################
