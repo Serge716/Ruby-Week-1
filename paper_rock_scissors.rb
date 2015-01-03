@@ -53,7 +53,7 @@ begin
     puts "You picked #{user} and computer picked #{computer}"
   end
 
-  if player_choice == "Paper" && computer_choice == "Paper"
+  if player_choice == computer_choice
     display_user_and_computer_selection(player_choice, computer_choice)
     puts "Its a tie"
 
