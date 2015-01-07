@@ -26,7 +26,7 @@
 # 8)  player busts if card value is greater than 21
 
 require 'pry'
-
+Puts "Welcome to Blackjack"
 
 card_faces = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
 
@@ -59,47 +59,81 @@ def deal_cards(card_deck)
   cards
 end
 
-def calculate_card_value(card)
-  if card[0] == "J" || card[0] == "Q" || card[0] == "K"
-    card_value = 10
-  elsif card[0] == "A"
-    card_value = 11
-  else
-    card_value = card.to_i
+def calculate_total(card_value)
+  total = 0
+  aces = card_value.each do |card|
+    card.to_s
+    # Collect A and set it to 11
+    if card[0] == "A"
+      total += 11
+    elsif card.to_i == 0
+      total += 10
+    else
+      total += card.to_i
+    end
   end
+  # correct Aces
+  aces.select{ |e| e[0] == "A"}.count.times do
+    total -= 10 if total > 21
+  end
+  total
 end
 
-def calculate_total_points(card1, card2)
+def calculate_total_points(card1, card2, card3, card4, card5)
   calculate_card_value(card1.to_i) + calculate_card_value(card2.to_i)
 end
 
-player_card1 = ""
-player_card2 = ""
-dealer_card1 = ""
-dealer_card2 = ""
-player_card1_value = "" 
+def check_winner(player_points, dealer_points)
+  if (player_points > dealer_points && player_points <= 21) || dealer_points > 21
+    return "Player"
+  elsif dealer_points > player_points
+    return "Dealer"
+  end
+end
 
+begin
+  my_cards = []
+  dealer_cards = []
 
-  player_card1 << deal_cards(shuffle_cards)
-  dealer_card1 << deal_cards(shuffle_cards)
-  player_card2 << deal_cards(shuffle_cards)
-  dealer_card2 << deal_cards(shuffle_cards)
+  # Deal Cards and Display Total
 
-puts "Player Cards:"
-puts player_card1
-puts player_card2
+  my_cards << deal_cards(shuffle_cards)
+  dealer_cards << deal_cards(shuffle_cards)
+  my_cards << deal_cards(shuffle_cards)
+  dealer_cards << deal_cards(shuffle_cards)
 
-card1_value = calculate_card_value(player_card1)
-card2_value = calculate_card_value(player_card2)
-player_points = calculate_total_points(card1_value, card2_value)
+  my_total = calculate_total(my_cards)
+  dealer_total = calculate_total(dealer_cards)
 
-puts "Total Points:  #{player_points.to_s}"
+  # Show Player and Dealer Cards
 
-puts "Dealer Cards:"
-puts dealer_card1
-puts dealer_card2
+  puts "My Cards:  #{my_cards[0]} | #{my_cards[1]} | Total Points: #{my_total}"
+  puts "Dealer Cards:  #{dealer_cards[0]} | #{dealer_cards[1]} | Total Points: #{dealer_total}"
+  puts ""
+  begin
+    puts "Would you like to 1) Hit or 2) Stay?"
+    hit_or_stay = gets.chomp
+    if hit_or_stay == "1"
+      my_cards << deal_cards(shuffle_cards)
+      my_total = calculate_total(my_cards)
+    end
+    puts "My Cards:  #{my_cards[0]} | #{my_cards[1]} | #{my_cards[2]} Total Points: #{my_total}"
 
+  end until hit_or_stay == "2" || my_total > 21
 
+  begin
+    if dealer_total < 17
+      dealer_cards << deal_cards(shuffle_cards)
+      dealer_total = calculate_total(dealer_cards)
+    elsif dealer_total > 21
+      puts "Dealer Bust!"
+    end
+    puts "Dealer Cards:  #{dealer_cards[0]} | #{dealer_cards[1]} | #{dealer_cards[2]} Total Points: #{dealer_total}"
+  end until dealer_total > 17
 
+  winner = check_winner(my_total, dealer_total)
+end until winner || dealer_point >= 17
 
-
+if winner
+  puts "#{winner} Won!"
+end
