@@ -32,7 +32,8 @@ card_faces = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
 
 def create_card_suits(suit, range)
   card_suit = {}
-  (range).each {|key, value| card_suit[key] = "#{key} of #{suit}"}
+  (range).each {|value| card_suit[value] = "#{value} of #{suit}"}
+  # (range).each {|key, value| card_suit[key] = "#{key} of #{suit}"}
   card_suit
 end
 
