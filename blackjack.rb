@@ -26,7 +26,7 @@
 # 8)  player busts if card value is greater than 21
 
 require 'pry'
-Puts "Welcome to Blackjack"
+puts "Welcome to Blackjack"
 
 card_faces = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
 
@@ -37,8 +37,7 @@ def create_card_suits(suit, range)
 end
 
 def make_deck_of_cards(suit1, suit2, suit3, suit4)
-  deck = suit1.concat([suit2, suit3, suit4])
-  deck
+  suit1.concat([suit2, suit3, suit4])
 end
 
 def deal_cards
@@ -117,22 +116,24 @@ begin
       my_cards << deal_cards(shuffle_cards)
       my_total = calculate_total(my_cards)
     end
-    puts "My Cards:  #{my_cards[0]} | #{my_cards[1]} | #{my_cards[2]} Total Points: #{my_total}"
+    puts "My Cards:  #{my_cards[0]} | #{my_cards[1]} | #{my_cards[2]} | #{my_cards[3]} Total Points: #{my_total}"
 
   end until hit_or_stay == "2" || my_total > 21
 
-  begin
-    if dealer_total < 17
-      dealer_cards << deal_cards(shuffle_cards)
-      dealer_total = calculate_total(dealer_cards)
-    elsif dealer_total > 21
-      puts "Dealer Bust!"
-    end
-    puts "Dealer Cards:  #{dealer_cards[0]} | #{dealer_cards[1]} | #{dealer_cards[2]} Total Points: #{dealer_total}"
-  end until dealer_total > 17
+  if my_total < 21
+    begin
+      if dealer_total < my_total
+        dealer_cards << deal_cards(shuffle_cards)
+        dealer_total = calculate_total(dealer_cards)
+      elsif dealer_total > 21
+        puts "Dealer Bust!"
+      end
+      puts "Dealer Cards:  #{dealer_cards[0]} | #{dealer_cards[1]} | #{dealer_cards[2]} | #{dealer_cards[3 ]}Total Points: #{dealer_total}"
+    end until dealer_total > 17 || my_total == 21
+  end
 
   winner = check_winner(my_total, dealer_total)
-end until winner || dealer_point >= 17
+end until winner || dealer_total >= 17
 
 if winner
   puts "#{winner} Won!"
