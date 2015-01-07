@@ -91,51 +91,110 @@ def check_winner(player_points, dealer_points)
   end
 end
 
-begin
-  my_cards = []
-  dealer_cards = []
 
-  # Deal Cards and Display Total
+my_cards = []
+dealer_cards = []
 
-  my_cards << deal_cards(shuffle_cards)
-  dealer_cards << deal_cards(shuffle_cards)
-  my_cards << deal_cards(shuffle_cards)
-  dealer_cards << deal_cards(shuffle_cards)
+# Deal Cards and Display Total
 
-  my_total = calculate_total(my_cards)
-  dealer_total = calculate_total(dealer_cards)
+my_cards << deal_cards(shuffle_cards)
+dealer_cards << deal_cards(shuffle_cards)
+my_cards << deal_cards(shuffle_cards)
+dealer_cards << deal_cards(shuffle_cards)
 
-  # Show Player and Dealer Cards
+my_total = calculate_total(my_cards)
+dealer_total = calculate_total(dealer_cards)
 
-  puts "My Cards:  #{my_cards[0]} | #{my_cards[1]} | Total Points: #{my_total}"
-  puts "Dealer Cards:  #{dealer_cards[0]} | #{dealer_cards[1]} | Total Points: #{dealer_total}"
-  puts ""
-  begin
-    puts "Would you like to 1) Hit or 2) Stay?"
-    hit_or_stay = gets.chomp
-    if hit_or_stay == "1"
-      my_cards << deal_cards(shuffle_cards)
-      my_total = calculate_total(my_cards)
-    end
-    puts "My Cards:  #{my_cards[0]} | #{my_cards[1]} | #{my_cards[2]} | #{my_cards[3]} Total Points: #{my_total}"
+# Show Player and Dealer Cards
 
-  end until hit_or_stay == "2" || my_total > 21
+puts "My Cards:  #{my_cards[0]} | #{my_cards[1]} | Total Points: #{my_total}"
+puts "Dealer Cards:  #{dealer_cards[0]} | #{dealer_cards[1]} | Total Points: #{dealer_total}"
+puts ""
 
-  if my_total < 21
-    begin
-      if dealer_total < my_total
-        dealer_cards << deal_cards(shuffle_cards)
-        dealer_total = calculate_total(dealer_cards)
-      elsif dealer_total > 21
-        puts "Dealer Bust!"
-      end
-      puts "Dealer Cards:  #{dealer_cards[0]} | #{dealer_cards[1]} | #{dealer_cards[2]} | #{dealer_cards[3 ]}Total Points: #{dealer_total}"
-    end until dealer_total > 17 || my_total == 21
+if my_total == 21
+  puts "Congratulations you Won!"
+  exit
+end
+
+while my_total < 21
+  puts "Would you like to 1) Hit or 2) Stay?"
+  hit_or_stay = gets.chomp
+
+  if !["1", "2"].include?(hit_or_stay)
+    puts "Error:  You must enter 1 or 2"
+    next
   end
 
-  winner = check_winner(my_total, dealer_total)
-end until winner || dealer_total >= 17
+  if hit_or_stay == "2"
+    puts "You chose to stay"
+    break
+  end
 
-if winner
-  puts "#{winner} Won!"
+  #hit
+  new_card = card_deck.pop
+  puts "Dealing new card to player #{new_card}"
+  my_cards << new_card
+  my_total = calculate_total(my_cards)
+  puts "Your total is now: #{my_total}"
+
+  if my_total == 21
+    puts "Congratulations, you hit Blackjack!  You win!"
+    exit
+  elsif my_total > 21
+    puts "Sorry, it looks like you busted!"
+    exit
+  end
+end 
+
+# Dealer turn
+
+if dealer_total == 21
+  puts "Sorry, dealer hit Blackjack.  You loose!"
+  exit
 end
+
+while dealer_total < 17
+  # hit
+  new_card = card_deck.pop
+  puts "Dealing new card to dealer:  #{new_card}"
+  dealer_cards << new_card
+  dealer_total = calculate_total(my_cards)
+  puts "Dealer total is now:  #{dealer_total}"
+
+  if dealer_total == 21
+    puts "Sorry, dealer hit Blackjack. You Loose."
+    exit
+  elsif dealer_total > 21
+    puts "Congratulations, dealer busted!  You win"
+    exit
+  end
+end
+
+# Compare Hands
+
+puts "Dealears cards:  "
+dealer_cards.each do |card|
+  puts "=> #{card}"
+end
+
+puts ""
+
+puts "Your cards:  "
+my_cards.each do |card|
+  puts "=> #{card}"
+end
+
+puts ""
+
+if dealer_total > my_total
+  puts "Sorry, dealer wins."
+elsif my_total < dealer_total
+  puts "Congratulations you won!"
+else
+  puts "It's a tie."
+end
+
+exit
+
+
+

@@ -1,16 +1,21 @@
-def calculate_total(cards)
-  arr = cards.map { |e| e[1]}
+def calculate_total(cards) 
+  # [['H', '3'], ['S', 'Q'], ... ]
+  arr = cards.map{|e| e[1] }
+
   total = 0
   arr.each do |value|
     if value == "A"
       total += 11
-    elsif value.to_i == 0
+    elsif value.to_i == 0 # J, Q, K
       total += 10
     else
       total += value.to_i
     end
   end
-  total
+  # Correct for Aces
+  arr.select {|e| e == "A"}.count.times do
+    total -= 10 if total > 21
+  end
 end
 
 puts "Welcome to Blackjack"
@@ -31,8 +36,10 @@ dealer_cards << deck.pop
 my_cards << deck.pop
 dealer_cards << deck.pop
 
+my_total = 0
+delear_total = 0
 delear_total = calculate_total(dealer_cards)
-my_total = calculate_total(my_total)
+my_total = calculate_total(my_cards)
 
 # Show Cards
 
@@ -40,3 +47,5 @@ puts "My Cards: #{my_cards[0]} and #{my_cards[1]} for a total value of #{my_tota
 puts "Dealer Cards: #{dealer_cards[0]} and #{dealer_cards[1]} for a total of #{delear_total}"
 puts ""
 puts "Would you like to: 1) Hit or 2) Stay"
+
+hit_or_stay = gets.chomp
